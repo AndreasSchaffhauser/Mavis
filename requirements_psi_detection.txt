@@ -1,0 +1,74 @@
+Requirement Analysis for the PSI Detection:
+-------------------------------------------
+
+- Detection for Mode-1 & Mode-2.
+- Size Estimation for Mode-1 & Mode-2.
+- Recovering of the hidden script.
+- Default Mode Investigation: File Mode.
+- Additional flag -d, you can assign a directory path and every *.png is investigated there.
+- Default Mode results: Shell output
+- Additional flag -csv, writing a csv file with the results. 
+- slow/fast mode (?)
+
+Example Results:
+----------------
+
+csv-File:
+- name_file[string];
+- size_file[int in bytes];
+- malicious[boolean];
+- size_detected_script[int in bytes];
+- content_malicious_script[string];
+- time_detection[float in ms];
+- time_estimation[float in ms];
+- time_recovering[float in ms]
+
+Shell Output:
+
+No.   |   Name   |   Filesize   |   Malicious?        |  size_detected_script  |   Scan Time
+------+----------+--------------+---------------------+------------------------+-------------
+1/50  |   *.png  |   123456 B   |   yes/no            |  123456 B              |   1234 ms
+------+----------+--------------+---------------------+------------------------+-------------
+...
+
+- Mode-1 signature: allRgbValues < 127
+- Mode-2 signature: look for a repetition in the red channel
+Question: allRgbValues < 127 && repetion in the red channel visible?
+	- Complete Black Picture allPixels(0,0,0)
+
+
+Workflow:
+---------
+Write a class for a png file with all the necessary fields.	
+
+- Does the image have a *.png extension?
+	if true:
+		try:
+			r,g,b = split();
+			is_mode_1 = False;
+			is_mode_2 = False;
+
+			file.malicious_mode_1, file.time_detection_mode_1 = mode_1_detection();
+			file.malicious_mode_2, file.time_detection_mode_2 = mode_2_detection();
+
+			if file.malicious_mode_1 and not file.malicious_mode_2 or not file.malicious_mode_1 and file.malicious_mode_2:
+				file.estimated_size, file.time_estimation = size_estimation();
+				file.hidden_content, file.time_hidden_content = recover_hidden_content();
+			elif file.malicious_mode_1 and file.malicious_mode_2:
+				print("Real crazy shit!")
+			elif not file.malicious_mode_1 and not file.malicious_mode_2:
+				file.size_detected_script = 0
+				file.hidden_content = None
+			else:
+				print("Something unexpected!")
+
+			if csv:
+				writeToCsv();
+			else:
+				printShell();
+
+		catch Exception e:
+			print(e)
+
+	else:
+		throw exception ("Not a png file!")
