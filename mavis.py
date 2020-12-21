@@ -6,7 +6,6 @@ from os.path import isfile, join
 import csv
 
 
-i = 0
 class Image:
 	def __init__(self, number, name, size):
 		self.number = number
