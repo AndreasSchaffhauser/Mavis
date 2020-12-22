@@ -93,7 +93,55 @@ def detection_mode_2(file):
 	file.time_detection_mode_2 = (t_stop - t_start) * 1000
 	file.time_detection_mode_2 = round(file.time_detection_mode_2, 2)
 
-#first value for the size of the script, second valie for the time needed
+def payload_estimation_mode_1(file):
+	im = Image.open(file.path)
+	try:
+		r,g,b = im.split()
+	except ValueError:
+		print('Too few colour channels present, can\'t hide data, hence clean file!')
+
+	r_arr = np.array(r)
+	r_newarr = r_arr.reshape(-1)
+
+	g_arr = np.array(g)
+	g_newarr = g_arr.reshape(-1)
+
+	b_arr = np.array(b)
+	b_newarr = b_arr.reshape(-1)
+
+	t_start = time.perf_counter()
+
+	tmp = []
+	file.estimated_script_size = 0
+
+	for x in range(len(r_newarr)):
+		tmp.append(b_newarr[x])
+		tmp.append(g_newarr[x])
+		tmp.append(r_newarr[x])
+
+	ending = 0
+	for x in range(len(tmp)-113):
+		if tmp[x] == tmp[x+113]:
+			ending+=1
+		else:
+			ending=0
+
+	pattern = []
+
+	if ending > 0:
+		pattern = tmp[-ending:]
+		for i in range(len(tmp)-113):
+			if tmp[i:ending+i] == pattern:
+				break
+			else:
+				file.estimated_script_size += 1
+	else:
+		file.estimated_script_size = -1
+
+	t_stop = time.perf_counter()
+	file.time_estimation = (t_stop - t_start) * 1000
+	file.time_estimation = round(file.time_estimation, 2)
+
 def payload_estimation_mode_2(file):
 	im = Image.open(file.path)
 	try:
