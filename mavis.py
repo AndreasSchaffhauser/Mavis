@@ -221,6 +221,8 @@ def write_to_shell(number_of_file,  number_of_all_files, file):
 			print(' ', end='')
 		elif x > 1 and x < len('# ==================== File ' + str(number_of_file) + '/' + str(number_of_all_files) + ' ==================== #') - 2:
 			print('=', end='')
+	print()
+	print()
 
 def process_command_line(argv):
 	parser = optparse.OptionParser()
@@ -288,7 +290,7 @@ if __name__ == "__main__":
 	for x in range(len(files)):
 		
 		detection_mode_1(files[x])
-		detection_mode_2(files[x])
+		# detection_mode_2(files[x])
 
 		if files[x].malicious_mode_2:
 			payload_estimation_mode_2(files[x])
