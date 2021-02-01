@@ -184,7 +184,51 @@ def payload_estimation_mode_2(file):
 	file.time_estimation = (t_stop - t_start) * 1000
 	file.time_estimation = round(file.time_estimation, 2)
 
-def payload_extraction(file):
+def payload_extraction_mode_1(file):
+	
+	im = Image.open(file.path)
+	try:
+		r,g,b = im.split()
+	except ValueError:
+		print('Too few colour channels present, can\'t hide data, hence clean file!')
+
+	r_arr = np.array(r)
+	r_newarr = r_arr.reshape(-1)
+
+	g_arr = np.array(g)
+	g_newarr = g_arr.reshape(-1)
+
+	b_arr = np.array(b)
+	b_newarr = b_arr.reshape(-1)
+
+	t_start = time.perf_counter()
+
+	file.extracted_script = ''
+	tmp = []
+
+	for x in range(len(r_newarr)):
+		tmp.append(b_newarr[x])
+		tmp.append(g_newarr[x])
+		tmp.append(r_newarr[x])
+	
+	for i in range(int(file.estimated_script_size) / 3):
+		if i < (int(file.estimated_script_size / 3)) - 1:
+			file.extracted_script += chr(tmp[i])
+			file.extracted_script += chr(tmp[i+1])
+			file.extracted_script += chr(tmp[i+2])
+		else:
+			if file.estimated_script_size % 3 == 1:
+				file.extracted_script += chr(tmp[i+3])
+			if file.estimated_script_size % 3 == 2:
+				file.extracted_script += chr(tmp[i+3])
+				file.extracted_script += chr(tmp[i+4])
+
+	t_stop = time.perf_counter()
+	
+	file.time_extraction = (t_stop - t_start) * 1000
+	file.time_extraction = round(file.time_extraction, 2)
+
+def payload_extraction_mode_2(file):
 	
 	im = Image.open(file.path)
 	try:
@@ -256,11 +300,11 @@ def write_to_shell(number_of_file,  number_of_all_files, file):
 	print('- Time Detection Mode-1: ' + str(file.time_detection_mode_1) + ' ms')
 	print('- Time Detection Mode-2: ' + str(file.time_detection_mode_2) + ' ms')
 	
-	if file.malicious_mode_2:
+	if file.malicious_mode_1 or file.malicious_mode_2:
 		print('- Estimated Script Size: ' + str(file.estimated_script_size) + ' B')
 		print('- Time for Estimation: ' + str(file.time_estimation) + ' ms')
-		# print('- Extracted Script: ' + str(file.extracted_script))
-		# print('- Time for Extraction: ' + str(file.time_extraction) + ' ms')
+		print('- Extracted Script: ' + str(file.extracted_script))
+		print('- Time for Extraction: ' + str(file.time_extraction) + ' ms')
 
 	for x in range(len('# ==================== File ' + str(number_of_file) + '/' + str(number_of_all_files) + ' ==================== #')):
 		if x == 0 or x == len('# ==================== File ' + str(number_of_file) + '/' + str(number_of_all_files) + ' ==================== #') - 1:
@@ -338,19 +382,18 @@ if __name__ == "__main__":
 	for x in range(len(files)):
 		
 		detection_mode_1(files[x])
-		# detection_mode_2(files[x])
+		detection_mode_2(files[x])
+
+		if files[x].malicious_mode_1:
+			payload_estimation_mode_1(files[x])
+			payload_extraction_mode_1(files[x])
 
 		if files[x].malicious_mode_2:
 			payload_estimation_mode_2(files[x])
+			payload_extraction_mode_2(files[x])		
 
 		if settings.csv:
 			write_to_csv(files[x], settings.csv)
 		else:
 			write_to_shell(x, len(files), files[x])
-
-
-
-
-
-
 
