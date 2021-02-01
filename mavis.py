@@ -212,11 +212,11 @@ def payload_extraction_mode_1(file):
 		tmp.append(r_newarr[x])
 	
 	for i in range(int(file.estimated_script_size) / 3):
-		if i < (int(file.estimated_script_size / 3)) - 1:
-			file.extracted_script += chr(tmp[i])
-			file.extracted_script += chr(tmp[i+1])
-			file.extracted_script += chr(tmp[i+2])
-		else:
+		file.extracted_script += chr(tmp[i])
+		file.extracted_script += chr(tmp[i+1])
+		file.extracted_script += chr(tmp[i+2])
+
+		if i == (int(file.estimated_script_size / 3)) - 1:
 			if file.estimated_script_size % 3 == 1:
 				file.extracted_script += chr(tmp[i+3])
 			if file.estimated_script_size % 3 == 2:
