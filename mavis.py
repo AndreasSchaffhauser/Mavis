@@ -19,7 +19,7 @@ class Process_Image:
 		self.time_detection_mode_1 = None
 		self.malicious_mode_2 = None
 		self.time_detection_mode_2 = None
-		self.estimated_script_size = None
+		self.estimated_script_size = 0
 		self.time_estimation = None
 		self.extracted_script = None
 		self.time_extraction = None
@@ -112,7 +112,6 @@ def payload_estimation_mode_1(file):
 	t_start = time.perf_counter()
 
 	tmp = []
-	file.estimated_script_size = 0
 
 	for x in range(len(r_newarr)):
 		tmp.append(b_newarr[x])
@@ -160,7 +159,6 @@ def payload_estimation_mode_2(file):
 	tmp1_before = []
 	tmp2_before = []
 
-	file.estimated_script_size = 0
 	for i in range(int(len(b_newarr) / 113)):
 
 		tmp1 = [k&0x0f for k in b_newarr[i*113:(i+1)*113]]
@@ -211,17 +209,8 @@ def payload_extraction_mode_1(file):
 		tmp.append(g_newarr[x])
 		tmp.append(r_newarr[x])
 	
-	for i in range(int(file.estimated_script_size) / 3):
+	for i in range(file.estimated_script_size):
 		file.extracted_script += chr(tmp[i])
-		file.extracted_script += chr(tmp[i+1])
-		file.extracted_script += chr(tmp[i+2])
-
-		if i == (int(file.estimated_script_size / 3)) - 1:
-			if file.estimated_script_size % 3 == 1:
-				file.extracted_script += chr(tmp[i+3])
-			if file.estimated_script_size % 3 == 2:
-				file.extracted_script += chr(tmp[i+3])
-				file.extracted_script += chr(tmp[i+4])
 
 	t_stop = time.perf_counter()
 	
@@ -285,7 +274,7 @@ def write_to_csv(image, csv_file_name):
 
 def write_to_shell(number_of_file,  number_of_all_files, file):
 
-	print('# ==================== File ' + str(number_of_file) + '/' + str(number_of_all_files) + ' ==================== #')
+	print('# ==================== File ' + str(number_of_file + 1) + '/' + str(number_of_all_files) + ' ==================== #')
 	print('- Path: ' + str(file.path))
 	print('- Image size: ' + str(file.size) + ' B')
 	print('- Malicious/Benign: ', end='')
@@ -301,7 +290,11 @@ def write_to_shell(number_of_file,  number_of_all_files, file):
 	print('- Time Detection Mode-2: ' + str(file.time_detection_mode_2) + ' ms')
 	
 	if file.malicious_mode_1 or file.malicious_mode_2:
-		print('- Estimated Script Size: ' + str(file.estimated_script_size) + ' B')
+		print('- Estimated Script Size: ', end='')
+		if file.estimated_script_size > -1:
+			print(str(file.estimated_script_size) + ' B')
+		else:
+			print("No reliable Pattern Detection!")
 		print('- Time for Estimation: ' + str(file.time_estimation) + ' ms')
 		print('- Extracted Script: ' + str(file.extracted_script))
 		print('- Time for Extraction: ' + str(file.time_extraction) + ' ms')
@@ -340,7 +333,7 @@ def process_command_line(argv):
 	parser.add_option(
 		'-c',
 		'--csv',
-		help='Write the output log to a csv file: default is to wrote on the shell',
+		help='Write the output log to a csv file: default is to write on the shell',
 		action='store',
 		type='string',
 		dest='csv'
@@ -380,17 +373,22 @@ if __name__ == "__main__":
 		files = [Process_Image(settings.directory + f, Path(settings.directory + f).stat().st_size) for f in listdir(settings.directory) if isfile(join(settings.directory, f)) and f.endswith('.png')]
 	
 	for x in range(len(files)):
-		
+
 		detection_mode_1(files[x])
 		detection_mode_2(files[x])
 
-		if files[x].malicious_mode_1:
+		# mode-1 pictures can trigger mode-2 alarms.
+		# mode-2 pictures can NOT trigger mode-1 alarms.
+		if files[x].malicious_mode_1 and files[x].malicious_mode_2:
+			files[x].malicious_mode_2 = False
+
+		if files[x].malicious_mode_1 and not files[x].malicious_mode_2:
 			payload_estimation_mode_1(files[x])
 			payload_extraction_mode_1(files[x])
 
-		if files[x].malicious_mode_2:
+		if files[x].malicious_mode_2 and not files[x].malicious_mode_1:
 			payload_estimation_mode_2(files[x])
-			payload_extraction_mode_2(files[x])		
+			payload_extraction_mode_2(files[x])
 
 		if settings.csv:
 			write_to_csv(files[x], settings.csv)
