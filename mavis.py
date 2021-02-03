@@ -23,6 +23,7 @@ class Process_Image:
 		self.time_estimation = None
 		self.extracted_script = None
 		self.time_extraction = None
+		self.script_functionality = None
 
 	def __str__(self):
 		return 'path: ' + str(self.path) + '\n' + \
@@ -34,7 +35,8 @@ class Process_Image:
 			   'estimated_script_size [bytes]: ' + str(self.estimated_script_size) + '\n' + \
 			   'time_estimation [ms]: ' + str(self.time_estimation) + '\n' + \
 			   'extracted_script: ' + str(self.extracted_script) + '\n' + \
-			   'time_extraction [ms]: ' + str(self.time_extraction)
+			   'time_extraction [ms]: ' + str(self.time_extraction) + '\n' + \
+			   'script_functionality: ' + str(script_functionality)
 
 def countDistinct(arr):
 	return len(Counter(arr).keys())
@@ -86,14 +88,29 @@ def detection_mode_2(file):
 
 	t_start = time.perf_counter()
 
+	# ------------ DETECTION PoC ------------ #
+
+	# arr = []
+	# for i in range(4):
+	# 	for j in range(100):
+	# 		arr.append((r_newarr[i+109*j])&(0x0f))
+	# file.malicious_mode_2 = (countDistinct(arr)<5):
+
+	# ------------ DETECTION PoC ------------ #
+
+	# ----------- DETECTION Mavis ----------- #
+
 	arr = [x & (0x0f) for x in r_newarr[::+109]]
 	file.malicious_mode_2 = countDistinct(arr) < 2 
+    
+    # ----------- DETECTION Mavis ----------- #
 
 	t_stop = time.perf_counter()
 	file.time_detection_mode_2 = (t_stop - t_start) * 1000
 	file.time_detection_mode_2 = round(file.time_detection_mode_2, 2)
 
 def payload_estimation_mode_1(file):
+
 	im = Image.open(file.path)
 	try:
 		r,g,b = im.split()
@@ -156,6 +173,37 @@ def payload_estimation_mode_2(file):
 
 	t_start = time.perf_counter()
 
+	# ------------ Payload Estimation PoC ------------ # 
+	
+	# idems = []
+	# datasize = len(g_newarr) - 67
+	# for i in range(datasize):
+	# 	if ((g_newarr[i]&0x0f) == (g_newarr[i+67]&0x0f)):
+	# 		idems.append(i)
+	# diff = np.diff(idems)
+	# res = diff[::-1]
+	# occurrences = np.count_nonzero(res == 1)
+	# i = 0
+	# while(i < len(res) and res[i] == 1):
+	# 	i = i + 1
+	# idems = []
+	# datasize = len(b_newarr) - 113
+	# for i in range(datasize):
+	# 	if ((b_newarr[i]&0x0f) == (b_newarr[i+113]&0x0f)):
+	# 		idems.append(i)
+	# diff = np.diff(idems)
+	# res = diff[::-1]
+	# occurrences = np.count_nonzero(res == 1)
+	# i = 1
+	# while(i<len(res) and res[i] == 1):
+	# 	i = i + 1
+	# file.estimated_script_size = datasize - i - 1
+
+	# ------------ Payload Estimation PoC ------------ # 
+
+
+	# ------------ Payload Estimation Mavis ------------ # 
+
 	tmp1_before = []
 	tmp2_before = []
 
@@ -177,6 +225,8 @@ def payload_estimation_mode_2(file):
 
 	if g_newarr[file.estimated_script_size]&0x0f != g_newarr[file.estimated_script_size+67]&0x0f:
 		file.estimated_script_size += 1
+
+	# ------------ Payload Estimation Mavis ------------ # 
 
 	t_stop = time.perf_counter()
 	file.time_estimation = (t_stop - t_start) * 1000
@@ -243,6 +293,41 @@ def payload_extraction_mode_2(file):
 	file.time_extraction = (t_stop - t_start) * 1000
 	file.time_extraction = round(file.time_extraction, 2)
 
+def determine_script_functionality_by_its_size(file, obfuscation="deobfuscated"):
+
+	mean_value_malware_rest = 265.37
+	mean_value_shellexecute = 513.72
+	mean_value_memset = 2354.7
+
+	obfuscation_factor = 0
+
+	if obfuscation == "deobfuscated":
+		obfuscation_factor = 1
+	elif obfuscation == "ascii":
+		obfuscation_factor = 4.194446103579311
+	elif obfuscation  == "ast":
+		obfuscation_factor = 1.096724269206056
+	elif obfuscation == "token":
+		obfuscation_factor = 2.028516722292627
+	elif obfuscation == "string":
+		obfuscation_factor = 1.7949865327280152
+	else:
+		raise ValueError("Unknown Obfuscation Technique!")
+
+	means = [mean_value_malware_rest, mean_value_shellexecute, mean_value_memset]
+	means = [x * obfuscation_factor for x in means]
+	absolute_difference_function = lambda list_value : abs(list_value - file.estimated_script_size)
+	closest_value = min(means, key=absolute_difference_function)
+
+	if closest_value == mean_value_malware_rest:
+		file.script_functionality = "malware/rest"
+	elif closest_value == mean_value_shellexecute:
+		file.script_functionality = "shellexecute"
+	elif closest_value == mean_value_memset:
+		file.script_functionality = "memset"
+	else:
+		raise ValueError("Unknown Script Functionality!")
+
 def write_to_csv(image, csv_file_name):
 	
 	csv_exists = os.path.isfile(csv_file_name)
@@ -259,7 +344,8 @@ def write_to_csv(image, csv_file_name):
 				'Estimated Script Size', \
 				'Time Estimation', \
 				'Extracted Script', \
-				'Time Extraction'])
+				'Time Extraction', \
+				'Functionality'])
 
 		writer.writerow([image.path, \
 			image.size, \
@@ -270,7 +356,8 @@ def write_to_csv(image, csv_file_name):
 			image.estimated_script_size, \
 			str(image.time_estimation).replace('.', ','), \
 			image.extracted_script, \
-			str(image.time_extraction).replace('.', ',')])
+			str(image.time_extraction).replace('.', ','), \
+			image.script_functionality])
 
 def write_to_shell(number_of_file,  number_of_all_files, file):
 
@@ -298,6 +385,11 @@ def write_to_shell(number_of_file,  number_of_all_files, file):
 		print('- Time for Estimation: ' + str(file.time_estimation) + ' ms')
 		print('- Extracted Script: ' + str(file.extracted_script))
 		print('- Time for Extraction: ' + str(file.time_extraction) + ' ms')
+		print('- Script Functionality: ', end='')
+		if file.estimated_script_size > -1:
+			print(str(file.script_functionality))
+		else:
+			print("Not able to determine category!")
 
 	for x in range(len('# ==================== File ' + str(number_of_file) + '/' + str(number_of_all_files) + ' ==================== #')):
 		if x == 0 or x == len('# ==================== File ' + str(number_of_file) + '/' + str(number_of_all_files) + ' ==================== #') - 1:
@@ -390,8 +482,10 @@ if __name__ == "__main__":
 			payload_estimation_mode_2(files[x])
 			payload_extraction_mode_2(files[x])
 
+		if (files[x].malicious_mode_1 or files[x].malicious_mode_2) and files[x].estimated_script_size > -1:
+			determine_script_functionality_by_its_size(files[x])
+
 		if settings.csv:
 			write_to_csv(files[x], settings.csv)
 		else:
 			write_to_shell(x, len(files), files[x])
-
