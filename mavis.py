@@ -261,7 +261,7 @@ def payload_extraction_mode_1(file):
 	
 	for i in range(file.estimated_script_size):
 		file.extracted_script += chr(tmp[i])
-
+	file.extracted_script = file.extracted_script.replace("\n", " ")
 	t_stop = time.perf_counter()
 	
 	file.time_extraction = (t_stop - t_start) * 1000
@@ -288,6 +288,7 @@ def payload_extraction_mode_2(file):
 	for i in range(file.estimated_script_size):
 		tmp = (b_newarr[i]&0x0f) * 16 + (g_newarr[i]&0x0f)
 		file.extracted_script += chr(tmp)
+	file.extracted_script = file.extracted_script.replace("\n", " ")
 	t_stop = time.perf_counter()
 	
 	file.time_extraction = (t_stop - t_start) * 1000
