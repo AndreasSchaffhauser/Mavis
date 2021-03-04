@@ -15,15 +15,15 @@ class Process_Image:
 	def __init__(self, path, size):
 		self.path = path
 		self.size = size
-		self.malicious_mode_1 = None
-		self.time_detection_mode_1 = None
-		self.malicious_mode_2 = None
-		self.time_detection_mode_2 = None
+		self.malicious_mode_1 = False
+		self.time_detection_mode_1 = 0.0
+		self.malicious_mode_2 = False
+		self.time_detection_mode_2 = 0.0
 		self.estimated_script_size = 0
-		self.time_estimation = None
-		self.extracted_script = None
-		self.time_extraction = None
-		self.script_functionality = None
+		self.time_estimation = 0.0
+		self.extracted_script = "No script extracted!"
+		self.time_extraction = 0.0
+		self.script_functionality = "No category determined!"
 
 	def __str__(self):
 		return 'path: ' + str(self.path) + '\n' + \
@@ -41,22 +41,7 @@ class Process_Image:
 def countDistinct(arr):
 	return len(Counter(arr).keys())
 
-def detection_mode_1(file):
-	
-	im = Image.open(file.path)
-	try:
-		r,g,b = im.split()
-	except ValueError:
-		print('Too few colour channels present, can\'t hide data, hence clean file!')
-
-	r_arr = np.array(r)
-	r_newarr = r_arr.reshape(-1)
-
-	g_arr = np.array(g)
-	g_newarr = g_arr.reshape(-1)
-
-	b_arr = np.array(b)
-	b_newarr = b_arr.reshape(-1)
+def detection_mode_1(file, r_newarr, g_newarr, b_newarr):
 	
 	t_start = time.perf_counter()
 
@@ -76,15 +61,7 @@ def detection_mode_1(file):
 	file.time_detection_mode_1 = (t_stop - t_start) * 1000
 	file.time_detection_mode_1 = round(file.time_detection_mode_1, 2)
 
-def detection_mode_2(file):
-	im = Image.open(file.path)
-	try:
-		r,g,b = im.split()
-	except ValueError:
-		print('Too few colour channels present, can\'t hide data, hence clean file!')
-
-	r_arr = np.array(r)
-	r_newarr = r_arr.reshape(-1)
+def detection_mode_2(file, r_newarr):
 
 	t_start = time.perf_counter()
 
@@ -109,22 +86,7 @@ def detection_mode_2(file):
 	file.time_detection_mode_2 = (t_stop - t_start) * 1000
 	file.time_detection_mode_2 = round(file.time_detection_mode_2, 2)
 
-def payload_estimation_mode_1(file):
-
-	im = Image.open(file.path)
-	try:
-		r,g,b = im.split()
-	except ValueError:
-		print('Too few colour channels present, can\'t hide data, hence clean file!')
-
-	r_arr = np.array(r)
-	r_newarr = r_arr.reshape(-1)
-
-	g_arr = np.array(g)
-	g_newarr = g_arr.reshape(-1)
-
-	b_arr = np.array(b)
-	b_newarr = b_arr.reshape(-1)
+def payload_estimation_mode_1(file, r_newarr, g_newarr, b_newarr):
 
 	t_start = time.perf_counter()
 
@@ -158,18 +120,7 @@ def payload_estimation_mode_1(file):
 	file.time_estimation = (t_stop - t_start) * 1000
 	file.time_estimation = round(file.time_estimation, 2)
 
-def payload_estimation_mode_2(file):
-	im = Image.open(file.path)
-	try:
-		r,g,b = im.split()
-	except ValueError:
-		print('Too few colour channels present, can\'t hide data, hence clean file!')
-
-	g_arr = np.array(g)
-	g_newarr = g_arr.reshape(-1)
-
-	b_arr = np.array(b)
-	b_newarr = b_arr.reshape(-1)
+def payload_estimation_mode_2(file, g_newarr, b_newarr):
 
 	t_start = time.perf_counter()
 
@@ -232,55 +183,31 @@ def payload_estimation_mode_2(file):
 	file.time_estimation = (t_stop - t_start) * 1000
 	file.time_estimation = round(file.time_estimation, 2)
 
-def payload_extraction_mode_1(file):
+def payload_extraction_mode_1(file, r_newarr, g_newarr, b_newarr):
 	
-	im = Image.open(file.path)
-	try:
-		r,g,b = im.split()
-	except ValueError:
-		print('Too few colour channels present, can\'t hide data, hence clean file!')
+	if file.estimated_script_size == - 1:
+		file.extracted_script = "No extraction possible!"
+	else:
+		t_start = time.perf_counter()
 
-	r_arr = np.array(r)
-	r_newarr = r_arr.reshape(-1)
+		file.extracted_script = ''
+		tmp = []
 
-	g_arr = np.array(g)
-	g_newarr = g_arr.reshape(-1)
+		for x in range(len(r_newarr)):
+			tmp.append(b_newarr[x])
+			tmp.append(g_newarr[x])
+			tmp.append(r_newarr[x])
+		
+		for i in range(file.estimated_script_size):
+			file.extracted_script += chr(tmp[i])
+		file.extracted_script = file.extracted_script.replace("\n", " ")
+		t_stop = time.perf_counter()
+		
+		file.time_extraction = (t_stop - t_start) * 1000
+		file.time_extraction = round(file.time_extraction, 2)
 
-	b_arr = np.array(b)
-	b_newarr = b_arr.reshape(-1)
-
-	t_start = time.perf_counter()
-
-	file.extracted_script = ''
-	tmp = []
-
-	for x in range(len(r_newarr)):
-		tmp.append(b_newarr[x])
-		tmp.append(g_newarr[x])
-		tmp.append(r_newarr[x])
+def payload_extraction_mode_2(file, g_newarr, b_newarr):
 	
-	for i in range(file.estimated_script_size):
-		file.extracted_script += chr(tmp[i])
-	file.extracted_script = file.extracted_script.replace("\n", " ")
-	t_stop = time.perf_counter()
-	
-	file.time_extraction = (t_stop - t_start) * 1000
-	file.time_extraction = round(file.time_extraction, 2)
-
-def payload_extraction_mode_2(file):
-	
-	im = Image.open(file.path)
-	try:
-		r,g,b = im.split()
-	except ValueError:
-		print('Too few colour channels present, can\'t hide data, hence clean file!')
-
-	g_arr = np.array(g)
-	g_newarr = g_arr.reshape(-1)
-
-	b_arr = np.array(b)
-	b_newarr = b_arr.reshape(-1)
-
 	t_start = time.perf_counter()
 
 	file.extracted_script = ''
@@ -386,11 +313,7 @@ def write_to_shell(number_of_file,  number_of_all_files, file):
 		print('- Time for Estimation: ' + str(file.time_estimation) + ' ms')
 		print('- Extracted Script: ' + str(file.extracted_script))
 		print('- Time for Extraction: ' + str(file.time_extraction) + ' ms')
-		print('- Script Functionality: ', end='')
-		if file.estimated_script_size > -1:
-			print(str(file.script_functionality))
-		else:
-			print("Not able to determine category!")
+		print('- Script Functionality: ' + file.script_functionality)
 
 	for x in range(len('# ==================== File ' + str(number_of_file) + '/' + str(number_of_all_files) + ' ==================== #')):
 		if x == 0 or x == len('# ==================== File ' + str(number_of_file) + '/' + str(number_of_all_files) + ' ==================== #') - 1:
@@ -426,7 +349,7 @@ def process_command_line(argv):
 	parser.add_option(
 		'-c',
 		'--csv',
-		help='Write the output log to a csv file: default is to write on the shell',
+		help='Write the output log also to a csv file: default is to write only to the shell',
 		action='store',
 		type='string',
 		dest='csv'
@@ -436,7 +359,7 @@ def process_command_line(argv):
 
 	# Both set
 	if settings.file and settings.directory:
-		raise ValueError("You can't specify a path to a file AND to a  directory!")
+		raise ValueError("You can't specify a path to a file AND to a directory!")
 	# None of both set
 	elif not settings.file and not settings.directory:
 		raise ValueError("You have to specify a path to a file XOR a path to a directory!")
@@ -467,26 +390,43 @@ if __name__ == "__main__":
 	
 	for x in range(len(files)):
 
-		detection_mode_1(files[x])
-		detection_mode_2(files[x])
+		im = Image.open(files[x].path)
 
-		# mode-1 pictures can trigger mode-2 alarms.
-		# mode-2 pictures can NOT trigger mode-1 alarms.
-		if files[x].malicious_mode_1 and files[x].malicious_mode_2:
-			files[x].malicious_mode_2 = False
+		try:
+			r,g,b = im.split()
 
-		if files[x].malicious_mode_1 and not files[x].malicious_mode_2:
-			payload_estimation_mode_1(files[x])
-			payload_extraction_mode_1(files[x])
+			r_arr = np.array(r)
+			r_newarr = r_arr.reshape(-1)
 
-		if files[x].malicious_mode_2 and not files[x].malicious_mode_1:
-			payload_estimation_mode_2(files[x])
-			payload_extraction_mode_2(files[x])
+			g_arr = np.array(g)
+			g_newarr = g_arr.reshape(-1)
 
-		if (files[x].malicious_mode_1 or files[x].malicious_mode_2) and files[x].estimated_script_size > -1:
-			determine_script_functionality_by_its_size(files[x])
+			b_arr = np.array(b)
+			b_newarr = b_arr.reshape(-1)
 
-		if settings.csv:
-			write_to_csv(files[x], settings.csv)
-		else:
+			detection_mode_1(files[x], r_newarr, g_newarr, b_newarr)
+			detection_mode_2(files[x], r_newarr)
+
+			# mode-1 pictures can trigger mode-2 alarms.
+			# mode-2 pictures can NOT trigger mode-1 alarms.
+			if files[x].malicious_mode_1 and files[x].malicious_mode_2:
+				files[x].malicious_mode_2 = False
+
+			if files[x].malicious_mode_1 and not files[x].malicious_mode_2:
+				payload_estimation_mode_1(files[x], r_newarr, g_newarr, b_newarr)
+				payload_extraction_mode_1(files[x], r_newarr, g_newarr, b_newarr)
+
+			if files[x].malicious_mode_2 and not files[x].malicious_mode_1:
+				payload_estimation_mode_2(files[x], g_newarr, b_newarr)
+				payload_extraction_mode_2(files[x], g_newarr, b_newarr)
+
+			if (files[x].malicious_mode_1 or files[x].malicious_mode_2) and files[x].estimated_script_size > -1:
+				determine_script_functionality_by_its_size(files[x])
+
 			write_to_shell(x, len(files), files[x])
+			
+			if settings.csv:
+				write_to_csv(files[x], settings.csv)
+
+		except ValueError:
+			print('Too few colour channels present, can\'t hide data, hence clean file!')
