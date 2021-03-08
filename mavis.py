@@ -375,6 +375,10 @@ def process_command_line(argv):
 		if settings.directory and not os.path.isdir(settings.directory):
 			raise ValueError("Specified path to directory is not a directory!")
 
+	# In the case that the user forget the '\''
+	if settings.directory and settings.directory[-1] != '\\':
+		settings.directory += '\\'
+
 	return settings, args
 
 if __name__ == "__main__":
@@ -429,4 +433,4 @@ if __name__ == "__main__":
 				write_to_csv(files[x], settings.csv)
 
 		except ValueError:
-			print('Too few colour channels present, can\'t hide data, hence clean file!')
+			print('Wrong color depth! Invoke-PSImage resulting images have always 24-Bit color depth!\n--> hence clean file!')
