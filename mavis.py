@@ -432,5 +432,8 @@ if __name__ == "__main__":
 			if settings.csv:
 				write_to_csv(files[x], settings.csv)
 
-		except ValueError:
-			print('Wrong color depth! Invoke-PSImage resulting images have always 24-Bit color depth!\n--> hence clean file!')
+		except ValueError as ve:
+			print(files[x].path + ': wrong color depth! Invoke-PSImage resulting images have always 24-Bit color depth!\n--> hence clean file! (' + str(ve) + ')')
+
+		except IndexError as ie:
+			print(files[x].path + ': caused a value error! (' + str(ie) + ')')
