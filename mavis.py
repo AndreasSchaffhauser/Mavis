@@ -61,7 +61,7 @@ def detection_mode_1(file, r_newarr, g_newarr, b_newarr):
 	file.time_detection_mode_1 = (t_stop - t_start) * 1000
 	file.time_detection_mode_1 = round(file.time_detection_mode_1, 2)
 
-def detection_mode_2(file, r_newarr):
+def detection_mode_2(file, r_newarr, g_newarr, b_newarr):
 
 	t_start = time.perf_counter()
 
@@ -77,8 +77,12 @@ def detection_mode_2(file, r_newarr):
 
 	# ----------- DETECTION Mavis ----------- #
 
-	arr = [x & (0x0f) for x in r_newarr[::+109]]
-	file.malicious_mode_2 = countDistinct(arr) < 2 
+	arr_1 = [x & (0x0f) for x in r_newarr[::+109]]
+	arr_2 = [x & (0x0f) for x in g_newarr[::+109]]
+	arr_3 = [x & (0x0f) for x in b_newarr[::+109]]
+	# red channel is the positiv criterion
+	# green & blue channel is the false positive criterion (e.g. when analyzing monotonous images)
+	file.malicious_mode_2 = countDistinct(arr_1) < 2 and countDistinct(arr_2) > 4 and countDistinct(arr_3) > 4
     
     # ----------- DETECTION Mavis ----------- #
 
@@ -409,7 +413,7 @@ if __name__ == "__main__":
 			b_newarr = b_arr.reshape(-1)
 
 			detection_mode_1(files[x], r_newarr, g_newarr, b_newarr)
-			detection_mode_2(files[x], r_newarr)
+			detection_mode_2(files[x], r_newarr, g_newarr, b_newarr)
 
 			# mode-1 pictures can trigger mode-2 alarms.
 			# mode-2 pictures can NOT trigger mode-1 alarms.
