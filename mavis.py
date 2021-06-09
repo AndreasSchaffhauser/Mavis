@@ -4,6 +4,8 @@ import os
 import csv
 import numpy as np
 import time
+import shutil
+
 from pathlib import Path
 from os import listdir
 from os.path import isfile, join
@@ -391,6 +393,9 @@ if __name__ == "__main__":
 
 	files = []
 
+	dir_name_mal1 = './malicious_mode_1_files'
+	dir_name_mal2 = './malicious_mode_2_files'
+
 	if settings.file:
 		files.append(Process_Image(settings.file, Path(settings.file).stat().st_size))		
 	else:
@@ -421,10 +426,16 @@ if __name__ == "__main__":
 				files[x].malicious_mode_2 = False
 
 			if files[x].malicious_mode_1 and not files[x].malicious_mode_2:
+				if not os.path.isdir(dir_name_mal1):
+					os.mkdir(dir_name_mal1)
+				shutil.copy2(files[x].path, dir_name_mal1)
 				payload_estimation_mode_1(files[x], r_newarr, g_newarr, b_newarr)
 				payload_extraction_mode_1(files[x], r_newarr, g_newarr, b_newarr)
 
 			if files[x].malicious_mode_2 and not files[x].malicious_mode_1:
+				if not os.path.isdir(dir_name_mal2):
+					os.mkdir(dir_name_mal2)
+				shutil.copy2(files[x].path, dir_name_mal2)
 				payload_estimation_mode_2(files[x], g_newarr, b_newarr)
 				payload_extraction_mode_2(files[x], g_newarr, b_newarr)
 
