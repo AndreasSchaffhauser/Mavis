@@ -381,10 +381,6 @@ def process_command_line(argv):
 		if settings.directory and not os.path.isdir(settings.directory):
 			raise ValueError("Specified path to directory is not a directory!")
 
-	# In the case that the user forget the '\''
-	if settings.directory and settings.directory[-1] != '\\':
-		settings.directory += '\\'
-
 	return settings, args
 
 if __name__ == "__main__":
@@ -393,8 +389,8 @@ if __name__ == "__main__":
 
 	files = []
 
-	dir_name_mal1 = './malicious_mode_1_files'
-	dir_name_mal2 = './malicious_mode_2_files'
+	dir_name_mal1 = 'malicious_mode_1_files'
+	dir_name_mal2 = 'malicious_mode_2_files'
 
 	if settings.file:
 		files.append(Process_Image(settings.file, Path(settings.file).stat().st_size))		
