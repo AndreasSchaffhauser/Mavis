@@ -381,6 +381,9 @@ def process_command_line(argv):
 		if settings.directory and not os.path.isdir(settings.directory):
 			raise ValueError("Specified path to directory is not a directory!")
 
+	if settings.directory:
+		settings.directory = Path(settings.directory)
+
 	return settings, args
 
 if __name__ == "__main__":
@@ -395,7 +398,7 @@ if __name__ == "__main__":
 	if settings.file:
 		files.append(Process_Image(settings.file, Path(settings.file).stat().st_size))		
 	else:
-		files = [Process_Image(settings.directory + f, Path(settings.directory + f).stat().st_size) for f in listdir(settings.directory) if isfile(join(settings.directory, f)) and f.endswith('.png')]
+		files = [Process_Image(settings.directory / f, (settings.directory / f).stat().st_size) for f in listdir(settings.directory) if isfile(join(settings.directory, f)) and f.endswith('.png')]
 	
 	for x in range(len(files)):
 
