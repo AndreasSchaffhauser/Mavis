@@ -25,3 +25,7 @@ The dataset what we used for our research pruposes contains 45,000 malicious ima
 Additionally to the 45k malicious images, there are 4,641 mode-1 deobfuscated images and 4,018 mode-1 obfuscated images. 
  
 You can download the dataset under: https://www.dropbox.com/s/1go9ic8mmske8e6/images.zip?dl=0
+
+## Example for a malicious PNG-File
+In the following you can see a PNG-File, which contains a malicious script injected via Invoke-PSImage.
+<img src="images/009995.png">
