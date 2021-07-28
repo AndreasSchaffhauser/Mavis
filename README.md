@@ -28,4 +28,4 @@ You can download the dataset under: https://www.dropbox.com/s/1go9ic8mmske8e6/im
 
 ## Example for a malicious PNG-File
 In the following you can see a PNG-File, which contains a malicious script injected via Invoke-PSImage.
-<img src="images/009995.png">
+<img src="009995.png">
