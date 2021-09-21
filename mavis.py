@@ -10,6 +10,7 @@ from pathlib import Path
 from os import listdir
 from os.path import isfile, join
 from PIL import Image
+from PIL import UnidentifiedImageError
 from collections import Counter 
 
 
@@ -402,52 +403,58 @@ if __name__ == "__main__":
 	
 	for x in range(len(files)):
 
-		im = Image.open(files[x].path)
-
 		try:
-			r,g,b = im.split()
 
-			r_arr = np.array(r)
-			r_newarr = r_arr.reshape(-1)
+			im = Image.open(files[x].path)
 
-			g_arr = np.array(g)
-			g_newarr = g_arr.reshape(-1)
+			try:
+				r,g,b = im.split()
 
-			b_arr = np.array(b)
-			b_newarr = b_arr.reshape(-1)
+				r_arr = np.array(r)
+				r_newarr = r_arr.reshape(-1)
 
-			detection_mode_1(files[x], r_newarr, g_newarr, b_newarr)
-			detection_mode_2(files[x], r_newarr, g_newarr, b_newarr)
+				g_arr = np.array(g)
+				g_newarr = g_arr.reshape(-1)
 
-			# mode-1 pictures can trigger mode-2 alarms.
-			# mode-2 pictures can NOT trigger mode-1 alarms.
-			if files[x].malicious_mode_1 and files[x].malicious_mode_2:
-				files[x].malicious_mode_2 = False
+				b_arr = np.array(b)
+				b_newarr = b_arr.reshape(-1)
 
-			if files[x].malicious_mode_1 and not files[x].malicious_mode_2:
-				if not os.path.isdir(dir_name_mal1):
-					os.mkdir(dir_name_mal1)
-				shutil.copy2(files[x].path, dir_name_mal1)
-				payload_estimation_mode_1(files[x], r_newarr, g_newarr, b_newarr)
-				payload_extraction_mode_1(files[x], r_newarr, g_newarr, b_newarr)
+				detection_mode_1(files[x], r_newarr, g_newarr, b_newarr)
+				detection_mode_2(files[x], r_newarr, g_newarr, b_newarr)
 
-			if files[x].malicious_mode_2 and not files[x].malicious_mode_1:
-				if not os.path.isdir(dir_name_mal2):
-					os.mkdir(dir_name_mal2)
-				shutil.copy2(files[x].path, dir_name_mal2)
-				payload_estimation_mode_2(files[x], g_newarr, b_newarr)
-				payload_extraction_mode_2(files[x], g_newarr, b_newarr)
+				# mode-1 pictures can trigger mode-2 alarms.
+				# mode-2 pictures can NOT trigger mode-1 alarms.
+				if files[x].malicious_mode_1 and files[x].malicious_mode_2:
+					files[x].malicious_mode_2 = False
 
-			if (files[x].malicious_mode_1 or files[x].malicious_mode_2) and files[x].estimated_script_size > -1:
-				determine_script_functionality_by_its_size(files[x])
+				if files[x].malicious_mode_1 and not files[x].malicious_mode_2:
+					if not os.path.isdir(dir_name_mal1):
+						os.mkdir(dir_name_mal1)
+					shutil.copy2(files[x].path, dir_name_mal1)
+					payload_estimation_mode_1(files[x], r_newarr, g_newarr, b_newarr)
+					payload_extraction_mode_1(files[x], r_newarr, g_newarr, b_newarr)
 
-			write_to_shell(x, len(files), files[x])
-			
-			if settings.csv:
-				write_to_csv(files[x], settings.csv)
+				if files[x].malicious_mode_2 and not files[x].malicious_mode_1:
+					if not os.path.isdir(dir_name_mal2):
+						os.mkdir(dir_name_mal2)
+					shutil.copy2(files[x].path, dir_name_mal2)
+					payload_estimation_mode_2(files[x], g_newarr, b_newarr)
+					payload_extraction_mode_2(files[x], g_newarr, b_newarr)
 
-		except ValueError as ve:
-			print(str(files[x].path) + ': wrong color depth! Invoke-PSImage resulting images have always 24-Bit color depth!\n--> hence clean file! (' + str(ve) + ')')
+				if (files[x].malicious_mode_1 or files[x].malicious_mode_2) and files[x].estimated_script_size > -1:
+					determine_script_functionality_by_its_size(files[x])
 
-		except IndexError as ie:
-			print(str(files[x].path) + ': caused a value error! (' + str(ie) + ')')
+				write_to_shell(x, len(files), files[x])
+				
+				if settings.csv:
+					write_to_csv(files[x], settings.csv)
+
+			except ValueError as ve:
+				print(str(files[x].path) + ': wrong color depth! Invoke-PSImage resulting images have always 24-Bit color depth!\n--> hence clean file! (' + str(ve) + ')')
+
+			except IndexError as ie:
+				print(str(files[x].path) + ': caused a value error! (' + str(ie) + ')')
+
+		except UnidentifiedImageError as uie:
+			print(str(files[x].path) + ': caused a UnidentifiedImageError! (' + str(uie) + ')')
+
