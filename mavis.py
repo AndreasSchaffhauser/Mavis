@@ -458,3 +458,6 @@ if __name__ == "__main__":
 		except UnidentifiedImageError as uie:
 			print(str(files[x].path) + ': caused a UnidentifiedImageError! (' + str(uie) + ')')
 
+		except Exception as ex:
+			print(str(files[x].path) + ': caused an Exception! (' + str(ex) + ')')
+
