@@ -5,13 +5,16 @@ import csv
 import numpy as np
 import time
 import shutil
+import json
+import uuid
 
 from pathlib import Path
 from os import listdir
 from os.path import isfile, join
 from PIL import Image
 from PIL import UnidentifiedImageError
-from collections import Counter 
+from collections import Counter
+from datetime import datetime
 
 
 class Process_Image:
@@ -294,6 +297,39 @@ def write_to_csv(image, csv_file_name):
 			str(image.time_extraction).replace('.', ','), \
 			image.script_functionality])
 
+def write_json_file(file, dir_name_json1, dir_name_json2):
+
+	json_file_name = os.path.basename(file.path)
+	json_file_name = json_file_name.replace("png", "json")
+	
+	detected_mode = "mode-"
+	if file.malicious_mode_1:
+		detected_mode += "1"
+	if file.malicious_mode_2:
+		detected_mode += "2"
+
+	result_dict = { "label": "Mavis Examination",
+		"description": "Examination of file " + str(file.path),
+		"data": { "file": str(file.path),
+		"detected mode": detected_mode,
+		"extracted_script": file.extracted_script },
+		"sources": [ { 
+			"uuid": str(uuid.uuid4()),
+			"markers": [ { 
+				"tool": "Mavis",
+				"from": str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+			} ]
+		} ]
+	}
+
+	if file.malicious_mode_1:
+		write_path = os.path.join(dir_name_json1, json_file_name)
+	else:
+		write_path = os.path.join(dir_name_json2, json_file_name)
+
+	with open(write_path, 'w') as json_file:
+		json.dump(result_dict, json_file)
+
 def write_to_shell(number_of_file,  number_of_all_files, file):
 
 	print('# ==================== File ' + str(number_of_file + 1) + '/' + str(number_of_all_files) + ' ==================== #')
@@ -396,6 +432,9 @@ if __name__ == "__main__":
 	dir_name_mal1 = 'malicious_mode_1_files'
 	dir_name_mal2 = 'malicious_mode_2_files'
 
+	dir_name_json1 = "json_files_mode_1"
+	dir_name_json2 = "json_files_mode_2"
+
 	if settings.file:
 		files.append(Process_Image(settings.file, Path(settings.file).stat().st_size))		
 	else:
@@ -430,6 +469,7 @@ if __name__ == "__main__":
 				if files[x].malicious_mode_1 and not files[x].malicious_mode_2:
 					if not os.path.isdir(dir_name_mal1):
 						os.mkdir(dir_name_mal1)
+						os.mkdir(dir_name_json1)
 					shutil.copy2(files[x].path, dir_name_mal1)
 					payload_estimation_mode_1(files[x], r_newarr, g_newarr, b_newarr)
 					payload_extraction_mode_1(files[x], r_newarr, g_newarr, b_newarr)
@@ -437,12 +477,16 @@ if __name__ == "__main__":
 				if files[x].malicious_mode_2 and not files[x].malicious_mode_1:
 					if not os.path.isdir(dir_name_mal2):
 						os.mkdir(dir_name_mal2)
+						os.mkdir(dir_name_json2)
 					shutil.copy2(files[x].path, dir_name_mal2)
 					payload_estimation_mode_2(files[x], g_newarr, b_newarr)
 					payload_extraction_mode_2(files[x], g_newarr, b_newarr)
 
 				if (files[x].malicious_mode_1 or files[x].malicious_mode_2) and files[x].estimated_script_size > -1:
 					determine_script_functionality_by_its_size(files[x])
+
+				if files[x].malicious_mode_1 or files[x].malicious_mode_2:
+					write_json_file(files[x], dir_name_json1, dir_name_json2)
 
 				write_to_shell(x, len(files), files[x])
 				
