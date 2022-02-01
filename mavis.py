@@ -15,6 +15,7 @@ from PIL import Image
 from PIL import UnidentifiedImageError
 from collections import Counter
 from datetime import datetime
+from kafka import KafkaProducer
 
 
 class Process_Image:
@@ -321,6 +322,9 @@ def write_json_file(file, dir_name_json1, dir_name_json2):
 			} ]
 		} ]
 	}
+
+	producer = KafkaProducer(bootstrap_servers='217.73.164.210:9094')
+	producer.send('mavis-test', result_dict)
 
 	if file.malicious_mode_1:
 		write_path = os.path.join(dir_name_json1, json_file_name)
