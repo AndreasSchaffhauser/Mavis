@@ -331,7 +331,7 @@ def write_json_file(file, dir_name_json1, dir_name_json2):
 	with open(write_path, 'w') as json_file:
 		json.dump(result_dict, json_file)
 
-def produce_kafka_topic(file, dir_name_json1, dir_name_json2)
+def produce_kafka_topic(file, dir_name_json1, dir_name_json2):
 	json_file_name = os.path.basename(file.path)
 	json_file_name = json_file_name.replace("png", "json")
 	
@@ -345,7 +345,7 @@ def produce_kafka_topic(file, dir_name_json1, dir_name_json2)
 	with open(write_path) as f:
 		data_dict = json.load(f)
 		data_str = json.dumps(data_dict)
-		print(datetime.datetime.now())
+		print(datetime.now())
 		producer.send('mavis-test', data_str.encode('utf-8')).get(timeout=30)
 
 
