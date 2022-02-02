@@ -15,7 +15,7 @@ from PIL import Image
 from PIL import UnidentifiedImageError
 from collections import Counter
 from datetime import datetime
-# from kafka import KafkaProducer
+from kafka import KafkaProducer
 
 
 class Process_Image:
@@ -323,9 +323,6 @@ def write_json_file(file, dir_name_json1, dir_name_json2):
 		} ]
 	}
 
-	# producer = KafkaProducer(bootstrap_servers='217.73.164.210:9094')
-	# producer.send('mavis-test', result_dict)
-
 	if file.malicious_mode_1:
 		write_path = os.path.join(dir_name_json1, json_file_name)
 	else:
@@ -333,6 +330,24 @@ def write_json_file(file, dir_name_json1, dir_name_json2):
 
 	with open(write_path, 'w') as json_file:
 		json.dump(result_dict, json_file)
+
+def produce_kafka_topic(file, dir_name_json1, dir_name_json2)
+	json_file_name = os.path.basename(file.path)
+	json_file_name = json_file_name.replace("png", "json")
+	
+	if file.malicious_mode_1:
+		write_path = os.path.join(dir_name_json1, json_file_name)
+	else:
+		write_path = os.path.join(dir_name_json2, json_file_name)
+
+	producer = KafkaProducer(bootstrap_servers='217.73.164.210:9094')
+
+	with open(write_path) as f:
+		data_dict = json.load(f)
+		data_str = json.dumps(data_dict)
+		print(datetime.datetime.now())
+		producer.send('mavis-test', data_str.encode('utf-8')).get(timeout=30)
+
 
 def write_to_shell(number_of_file,  number_of_all_files, file):
 
@@ -491,6 +506,7 @@ if __name__ == "__main__":
 
 				if files[x].malicious_mode_1 or files[x].malicious_mode_2:
 					write_json_file(files[x], dir_name_json1, dir_name_json2)
+					produce_kafka_topic(files[x], dir_name_json1, dir_name_json2)
 
 				write_to_shell(x, len(files), files[x])
 				
