@@ -31,4 +31,4 @@ In the following you can see a PNG-File, which contains a malicious script injec
 <img src="malicious.png">
 
 ## Acknowledgements 
-This work was partially supported by the Horizon 2020 Program through [SIMARGL](https://simargl.eu/) H2020-SU-ICT-01-2018, Grant Agreement No. 833042.
+This work was supported by the Horizon 2020 Program through [SIMARGL](https://simargl.eu/) H2020-SU-ICT-01-2018, Grant Agreement No. 833042.
