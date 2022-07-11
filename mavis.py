@@ -60,7 +60,7 @@ def detection_mode_1(file, r_newarr, g_newarr, b_newarr):
 		if g_newarr[j] < 9 or (g_newarr[j] > 10 and g_newarr[j] < 32) or g_newarr[j] > 126:
 			file.malicious_mode_1 = False
 			break
-		if g_newarr[j] < 9 or (g_newarr[j] > 10 and g_newarr[j] < 32) or g_newarr[j] > 126:
+		if b_newarr[j] < 9 or (b_newarr[j] > 10 and b_newarr[j] < 32) or b_newarr[j] > 126:
 			file.malicious_mode_1 = False
 			break
 
