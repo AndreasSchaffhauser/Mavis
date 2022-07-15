@@ -84,12 +84,12 @@ def detection_mode_2(file, r_newarr, g_newarr, b_newarr):
 
 	# ----------- DETECTION Mavis ----------- #
 
-	arr_1 = [x & (0x0f) for x in r_newarr[::+109]]
-	arr_2 = [x for x in g_newarr[::+109]]
-	arr_3 = [x for x in b_newarr[::+109]]
+	arr_1 = np.bitwise_and(r_newarr[::+109], 0x0F)
+	arr_2 = g_newarr[::+109]
+	arr_3 = b_newarr[::+109]
 	# red channel is the positiv criterion
 	# green & blue channel is the false positive criterion (e.g. when analyzing monotonous images)
-	file.malicious_mode_2 = countDistinct(arr_1) < 2 and countDistinct(arr_2) > 4 and countDistinct(arr_3) > 4
+	file.malicious_mode_2 = len(np.unique(arr_1)) < 2 and len(np.unique(arr_2)) > 4 and len(np.unique(arr_3)) > 4
     
     # ----------- DETECTION Mavis ----------- #
 
@@ -171,21 +171,20 @@ def payload_estimation_mode_2(file, g_newarr, b_newarr):
 
 	for i in range(int(len(b_newarr) / 113)):
 
-		tmp1 = [k&0x0f for k in b_newarr[i*113:(i+1)*113]]
-		tmp2 = [k&0x0f for k in b_newarr[(i+1)*113:(i+2)*113]]
+		tmp1 = np.bitwise_and(b_newarr[i*113:(i+1)*113], 0x0F)
+		tmp2 = np.bitwise_and(b_newarr[(i+1)*113:(i+2)*113], 0x0F)
 
-		if tmp1 != tmp2:
+		if not np.array_equal(tmp1, tmp2):
 			tmp1_before = tmp1
 			tmp2_before = tmp2
 			file.estimated_script_size += 113
 		else:
-			for j in range(len(tmp1_before)):
-				if tmp1_before[j:] == tmp2_before[j:]:
-					file.estimated_script_size -= len(tmp1_before[j:])
-					break
+			array_the_same = tmp1_before == tmp2_before
+			last_inequal_index = np.where(array_the_same == False)[0][-1]
+			file.estimated_script_size -= len(tmp1_before) - last_inequal_index
 			break
 
-	if g_newarr[file.estimated_script_size]&0x0f != g_newarr[file.estimated_script_size+67]&0x0f:
+	if not np.array_equal(g_newarr[file.estimated_script_size]&0x0f, g_newarr[file.estimated_script_size+67]&0x0f):
 		file.estimated_script_size += 1
 
 	# ------------ Payload Estimation Mavis ------------ # 
@@ -222,11 +221,10 @@ def payload_extraction_mode_2(file, g_newarr, b_newarr):
 	t_start = time.perf_counter()
 
 	file.extracted_script = ''
+ 
+	char_array = ((b_newarr[:file.estimated_script_size]&0x0F) * 16) + (g_newarr[:file.estimated_script_size]&0x0F)
+	file.extracted_script = char_array.tostring().decode('utf-8').replace("\n", " ")
 	
-	for i in range(file.estimated_script_size):
-		tmp = (b_newarr[i]&0x0f) * 16 + (g_newarr[i]&0x0f)
-		file.extracted_script += chr(tmp)
-	file.extracted_script = file.extracted_script.replace("\n", " ")
 	t_stop = time.perf_counter()
 	
 	file.time_extraction = (t_stop - t_start) * 1000
