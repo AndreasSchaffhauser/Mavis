@@ -15,6 +15,7 @@ from PIL import Image
 from PIL import UnidentifiedImageError
 from collections import Counter
 from datetime import datetime
+from kafka import KafkaProducer
 
 
 class Process_Image:
